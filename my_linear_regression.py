@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import math
 
 
 class MyLinearRegression():
@@ -13,6 +12,7 @@ class MyLinearRegression():
         self.alpha = alpha
         self.max_iter = max_iter
         self.thetas = thetas
+        self.bounds = None
 
     def fit_(self, x, y):
         """
@@ -37,10 +37,22 @@ class MyLinearRegression():
         try:
             self.thetas = self.thetas.astype(float)
             for i in range(self.max_iter):
-                self.thetas -= self.alpha * self.gradient_(x, y)
+                self.thetas -= self.alpha * self.gradient_(self.minmax_(x), y)
             return self.thetas
         except Exception as e:
             print("Error in fit: ", e)
+            return None
+
+    def minmax_(self, x):
+        if (type(x) != np.ndarray or len(x) == 0):
+            print("TypeError in minmax")
+            return None
+        try:
+            if self.bounds is None:
+                self.bounds = np.array([x.min(), x.max()])
+            return (x - self.bounds[0]) / (self.bounds[1] - self.bounds[0])
+        except Exception as e:
+            print("Error in minmax: ", e)
             return None
 
     def predict_thetas_(self, x, thetas):
@@ -115,7 +127,7 @@ class MyLinearRegression():
             return None
 
     def plot_(self, x, y, xlabel="x", ylabel="y", units="units"):
-        plt.plot(x, self.predict_(x), 'X-',
+        plt.plot(x, self.predict_(self.minmax_(x)), 'X-',
                  color='limegreen',
                  label="$s_{predict}(" + units + ")$")
         plt.plot(x, y, 'o',
