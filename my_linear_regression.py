@@ -15,25 +15,6 @@ class MyLinearRegression():
         self.bounds = None
 
     def fit_(self, x, y):
-        """
-        Description:
-            Fits the model to the training dataset contained in x and y.
-        Args:
-            x: has to be a numpy.array, a vector of shape m * 1:
-            (number of training examples, 1).
-            y: has to be a numpy.array, a vector of shape m * 1:
-            (number of training examples, 1).
-            theta: has to be a numpy.array, a vector of shape 2 * 1.
-            alpha: has to be a float, the learning rate
-            max_iter: has to be an int, the number of
-            iterations done during the gradient descent
-        Return:
-            new_theta: numpy.array, a vector of shape 2 * 1.
-            None if there is a matching shape problem.
-            None if x, y, theta, alpha or max_iter is not of the expected type.
-        Raises:
-            This function should not raise any Exception.
-        """
         try:
             self.thetas = self.thetas.astype(float)
             for i in range(self.max_iter):
@@ -133,31 +114,9 @@ class MyLinearRegression():
         plt.plot(x, y, 'o',
                  label="$s_{true}(" + units + ")$",
                  color="deepskyblue")
-        plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left',
-                   ncol=2, borderaxespad=0.)
+        plt.legend()
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
-        plt.grid()
-        plt.show()
-
-    def plot_loss_(self, x, y, xborns=(-10, 8), yborns=(-5, 15)):
-        thetas0 = np.linspace(self.thetas[0] + xborns[0],
-                              self.thetas[0] + xborns[1], 6)
-        thetas1 = np.linspace(self.thetas[1] + yborns[0],
-                              self.thetas[1] + yborns[1], 1000)
-        J = np.zeros((1000))
-        for i in range(thetas0.shape[0]):
-            for j in range(thetas1.shape[0]):
-                J[j] = self.mse_(y,
-                                  self.predict_thetas_(x,
-                                                       np.array([thetas0[i],
-                                                                 thetas1[j]])))
-            plt.plot(thetas1, J, str(0.1 + i / 7.0),
-                     label="$J(θ_0=c_" + str(i) + "θ_1)$")
-        plt.ylabel("cost function J($θ_0, θ_1$)")
-        plt.xlabel("$θ_1$")
-        plt.legend(loc="lower right")
-        plt.xlim([-14.5, -3.5])
-        plt.ylim([10, 150])
+        plt.title("Cost: " + str(self.mse_(y, self.predict_(self.minmax_(x)))))
         plt.grid()
         plt.show()
