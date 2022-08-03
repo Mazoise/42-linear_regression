@@ -4,12 +4,11 @@ import numpy as np
 
 try:
     model = pd.read_csv("model.csv")
-    thetas = np.array(model["thetas"].values).reshape(-1, 1)
-    bounds = np.array(model["bounds"].values).reshape(-1, 1)
+    thetas = np.array(model["thetas"].values)
+    bounds = np.array(model["bounds"].values)
 except Exception as e:
-    print("No theta set", e)
     thetas = np.array([0, 0])
-    bounds = np.array([0, 0])
+    bounds = np.array([0, 1])
 print("Type \"exit\" to quit the program")
 while True:
     mile = input("Mileage: ")

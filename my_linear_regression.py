@@ -17,8 +17,9 @@ class MyLinearRegression():
     def fit_(self, x, y):
         try:
             self.thetas = self.thetas.astype(float)
+            x_norm = self.minmax_(x)
             for i in range(self.max_iter):
-                self.thetas -= self.alpha * self.gradient_(self.minmax_(x), y)
+                self.thetas -= self.alpha * self.gradient_(x_norm, y)
             return self.thetas
         except Exception as e:
             print("Error in fit: ", e)
